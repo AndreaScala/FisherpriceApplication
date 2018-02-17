@@ -1,0 +1,15 @@
+docker run -d --hostname my-rabbit --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3 
+
+sudo docker run -p 3307:3306 --name=mysql1 -d mysql/mysql-server
+
+sudo docker exec -it mysql1 mysql -uroot -p
+
+sudo docker logs mysql1
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'bastacomplicazioni';
+CREATE USER 'root'@'%' IDENTIFIED BY 'bastacomplicazioni';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+CREATE DATABASE db1; USE db1;
+CREATE TABLE LogEntries (timeStamp varchar(255), MachineID varchar(255), messageString varchar(255));
+INSERT INTO LogEntries VALUES ("testts", "testmID", "testms");
+SELECT * FROM LogEntries;

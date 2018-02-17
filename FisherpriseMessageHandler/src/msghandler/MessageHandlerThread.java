@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.core.MediaType;
 
 import utilities.*;
 
@@ -48,11 +49,11 @@ public class MessageHandlerThread implements Runnable {
                     if (le.getMessageString().indexOf(param)!=-1) 
                         System.out.println(Thread.currentThread().getName() + " [x] Received '" + le + "'");
                     Gson gson = new Gson();
-                    gson.toJson(le);
+                    String input = gson.toJson(le);
                     
                     Client c = Client.create();
                     WebResource webResourcePost = c.resource(URL);
-                    ClientResponse rispostaPost = webResourcePost.post(ClientResponse.class);
+                    ClientResponse rispostaPost = webResourcePost.post(ClientResponse.class, input);
                     
                 }
             };

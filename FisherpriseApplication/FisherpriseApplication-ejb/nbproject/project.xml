@@ -6,6 +6,8 @@
             <name>FisherpriseApplication-ejb</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <included-library dirs="200">reference.FisherpriseApplicationUtil.jar</included-library>
+            <included-library dirs="200">file.reference.gson-2.8.0.jar</included-library>
+            <included-library dirs="200">file.reference.mysql-connector-java-5.1.45.zip</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
