@@ -47,7 +47,7 @@ public class GenericTest {
             // iterate through the java resultset
             while (rs.next())
             {
-                
+                System.out.println(rs.getString("timeStamp"));
             }
             st.close();
         }

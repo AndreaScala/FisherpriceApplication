@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Stateless;
 import utilities.LogEntry;
 
@@ -26,17 +28,17 @@ public class ReplicaManagerBean implements ReplicaManagerBeanLocal {
     private final static String PASSWORD = "bastacomplicazioni";
 
     @Override
+    @Lock(LockType.WRITE)
     public void writeOnDB(LogEntry le) {
-        //QUI SI DEVE GESTIRE LA COSA DELLE QUERY AL DATABASE
-        //LA QUERY CHE DOVREBBE FARE QUESTO TIPO E'
-        /*"INSERT INTO LogEntries VALUES ('" + 
-            le.timestamp + "', '" + 
-            le.MachineID + "', '" +
-            le.messageString + "');"
-        */
-        //MA DEVONO ESSERE FATTE UNA ALLA VOLTA SENNO' IL COSO IMPAZZISCE
+        String myQuery = "INSERT INTO LogEntries VALUES ('" + 
+            le.getTimeStamp() + "', '" + 
+            le.getMachineID() + "', '" +
+            le.getMessageString() + "');";
+        
+        doQuery(myQuery);
     }
 
+    @Lock(LockType.WRITE)
     public void doQuery (String query) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -47,19 +49,14 @@ public class ReplicaManagerBean implements ReplicaManagerBeanLocal {
         }
         try{
 
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/" + DB,"root",PASSWORD);          
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/" + DB + "?autoReconnect=true&useSSL=false","root",PASSWORD);          
 
             // create the java statement
             Statement st = con.createStatement();
 
-            // execute the query, and get a java resultset
-            ResultSet rs = st.executeQuery(query);
+            // execute the query
+            int rs = st.executeUpdate(query);
 
-            // iterate through the java resultset
-            while (rs.next())
-            {
-                
-            }
             st.close();
         }
         catch (SQLException e)
