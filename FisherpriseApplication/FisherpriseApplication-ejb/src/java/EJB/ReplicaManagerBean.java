@@ -7,21 +7,20 @@ package EJB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import utilities.LogEntry;
 
 /**
  *
  * @author ilario
  */
-@Stateless
+@Singleton
 public class ReplicaManagerBean implements ReplicaManagerBeanLocal {
     
     private final static String DB = "db1";
@@ -48,7 +47,7 @@ public class ReplicaManagerBean implements ReplicaManagerBeanLocal {
             return;
         }
         try{
-
+            //System.out.println("Sto scrivendo sul DB");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/" + DB + "?autoReconnect=true&useSSL=false","root",PASSWORD);          
 
             // create the java statement
@@ -58,6 +57,8 @@ public class ReplicaManagerBean implements ReplicaManagerBeanLocal {
             int rs = st.executeUpdate(query);
 
             st.close();
+            con.close();
+            //System.out.println("Ho scritto sul DB");
         }
         catch (SQLException e)
         {

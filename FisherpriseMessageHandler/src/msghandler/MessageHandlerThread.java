@@ -9,8 +9,6 @@ import java.util.logging.Logger;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import javax.ws.rs.core.MediaType;
-
 import utilities.*;
 
 public class MessageHandlerThread implements Runnable {
@@ -46,15 +44,15 @@ public class MessageHandlerThread implements Runnable {
                     String message = new String(body, "UTF-8");
                     String[] entryParts = message.split(" ");
                     LogEntry le = new LogEntry(entryParts[0] + " " + entryParts[1], entryParts[4], message.substring(message.indexOf(" - ") + 3, message.length()));
-                    if (le.getMessageString().indexOf(param)!=-1) 
+                    if (le.getMessageString().indexOf(param)!=-1){ 
                         System.out.println(Thread.currentThread().getName() + " [x] Received '" + le + "'");
-                    Gson gson = new Gson();
-                    String input = gson.toJson(le);
-                    
-                    Client c = Client.create();
-                    WebResource webResourcePost = c.resource(URL);
-                    ClientResponse rispostaPost = webResourcePost.post(ClientResponse.class, input);
-                    
+                        Gson gson = new Gson();
+                        String input = gson.toJson(le);
+
+                        Client c = Client.create();
+                        WebResource webResourcePost = c.resource(URL);
+                        ClientResponse rispostaPost = webResourcePost.post(ClientResponse.class, input);
+                    }
                 }
             };
             channel.basicConsume(QUEUE_NAME, true, consumer);
@@ -64,5 +62,4 @@ public class MessageHandlerThread implements Runnable {
             Logger.getLogger(MessageHandlerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

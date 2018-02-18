@@ -6,14 +6,14 @@
 package EJB;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import utilities.LogEntry;
 
 /**
  *
  * @author ilario
  */
-@Stateless
+@Singleton
 public class SendToDBManager implements SendToDBManagerLocal {
 
     @EJB
