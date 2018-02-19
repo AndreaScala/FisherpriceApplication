@@ -13,7 +13,7 @@ import utilities.LogEntry;
  * @author ilario
  */
 @Local
-public interface SendToDBManagerLocal {
+public interface DataManagerBeanLocal {
     void add (LogEntry le);
     
 }

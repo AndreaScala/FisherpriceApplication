@@ -11,8 +11,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import utilities.LogEntry;
 
@@ -20,14 +18,14 @@ import utilities.LogEntry;
  *
  * @author ilario
  */
-@Singleton
-public class ReplicaManagerBean implements ReplicaManagerBeanLocal {
+@Singleton (name = "replica5")
+public class ReplicaManagerBean5 implements ReplicaManagerBeanLocal {
     
-    private final static String DB = "db1";
+    private final static String PORT = "3311";
+    private final static String DB = "db";
     private final static String PASSWORD = "bastacomplicazioni";
 
     @Override
-    @Lock(LockType.WRITE)
     public void writeOnDB(LogEntry le) {
         String myQuery = "INSERT INTO LogEntries VALUES ('" + 
             le.getTimeStamp() + "', '" + 
@@ -37,7 +35,6 @@ public class ReplicaManagerBean implements ReplicaManagerBeanLocal {
         doQuery(myQuery);
     }
 
-    @Lock(LockType.WRITE)
     public void doQuery (String query) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -48,7 +45,7 @@ public class ReplicaManagerBean implements ReplicaManagerBeanLocal {
         }
         try{
             //System.out.println("Sto scrivendo sul DB");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/" + DB + "?autoReconnect=true&useSSL=false","root",PASSWORD);          
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:" + PORT + "/" + DB + "?autoReconnect=true&useSSL=false","root",PASSWORD);          
 
             // create the java statement
             Statement st = con.createStatement();
@@ -62,7 +59,7 @@ public class ReplicaManagerBean implements ReplicaManagerBeanLocal {
         }
         catch (SQLException e)
         {
-            Logger.getLogger(ReplicaManagerBean.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ReplicaManagerBean5.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 }

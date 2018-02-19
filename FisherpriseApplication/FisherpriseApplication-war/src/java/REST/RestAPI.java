@@ -1,10 +1,9 @@
 package REST;
 
-import EJB.SendToDBManagerLocal;
+import EJB.DataManagerBeanLocal;
 import com.google.gson.Gson;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -17,24 +16,25 @@ import utilities.LogEntry;
 @Path("/datamanager")
 public class RestAPI {
 
-    SendToDBManagerLocal sendToDBManager = lookupSendToDBManagerLocal();
+    DataManagerBeanLocal dataManagerBean = lookupDataManagerBeanLocal();
     
     
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     public void receiveMessage(String logEntryJson){
         LogEntry le = new Gson().fromJson(logEntryJson, LogEntry.class);
-        sendToDBManager.add(le);
+        dataManagerBean.add(le);
     }
 
-    private SendToDBManagerLocal lookupSendToDBManagerLocal() {
+    private DataManagerBeanLocal lookupDataManagerBeanLocal() {
         try {
             Context c = new InitialContext();
-            return (SendToDBManagerLocal) c.lookup("java:global/FisherpriseApplication/FisherpriseApplication-ejb/SendToDBManager!EJB.SendToDBManagerLocal");
+            return (DataManagerBeanLocal) c.lookup("java:global/FisherpriseApplication/FisherpriseApplication-ejb/DataManagerBean!EJB.DataManagerBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
     }
+    
     
 }

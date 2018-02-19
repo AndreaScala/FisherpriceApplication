@@ -13,4 +13,10 @@
             30
         </session-timeout>
     </session-config>
+    <ejb-local-ref>
+        <ejb-ref-name>DataManagerBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>EJB.DataManagerBeanLocal</local>
+        <ejb-link>FisherpriseApplication-ejb.jar#DataManagerBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

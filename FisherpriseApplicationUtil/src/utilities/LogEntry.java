@@ -1,22 +1,31 @@
 package utilities;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class LogEntry {
-    private String timeStamp;
+    private LocalDateTime timeStamp;
     private String MachineID;
     private String messageString;
 
     public LogEntry(String timeStamp, String MachineID, String messageString) {
+        this.timeStamp = LocalDateTime.parse(timeStamp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+        this.MachineID = MachineID;
+        this.messageString = messageString;
+    }
+
+    public LogEntry(LocalDateTime timeStamp, String MachineID, String messageString) {
         this.timeStamp = timeStamp;
         this.MachineID = MachineID;
         this.messageString = messageString;
     }
 
     public String getTimeStamp() {
-        return timeStamp;
+        return timeStamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+        this.timeStamp = LocalDateTime.parse(timeStamp, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     public String getMachineID() {

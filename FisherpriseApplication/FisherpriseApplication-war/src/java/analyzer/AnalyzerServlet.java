@@ -5,7 +5,7 @@
  */
 package analyzer;
 
-import EJB.SendToDBManagerLocal;
+import EJB.DataManagerBeanLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AnalyzerServlet extends HttpServlet {
 
     @EJB
-    private SendToDBManagerLocal sendToDBManager;
+    private DataManagerBeanLocal dataManagerBeanLocal;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

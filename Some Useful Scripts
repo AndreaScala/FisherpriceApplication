@@ -1,15 +1,23 @@
 docker run -d --hostname my-rabbit --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3 
 
 sudo docker run -p 3307:3306 --name=mysql1 -d mysql/mysql-server
-
-sudo docker exec -it mysql1 mysql -uroot -p
+sudo docker run -p 3308:3306 --name=mysql2 -d mysql/mysql-server
+sudo docker run -p 3309:3306 --name=mysql3 -d mysql/mysql-server
+sudo docker run -p 3310:3306 --name=mysql4 -d mysql/mysql-server
+sudo docker run -p 3311:3306 --name=mysql5 -d mysql/mysql-server
 
 sudo docker logs mysql1
+
+sudo docker exec -it mysql1 mysql -uroot -p
 
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'bastacomplicazioni';
 CREATE USER 'root'@'%' IDENTIFIED BY 'bastacomplicazioni';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
-CREATE DATABASE db1; USE db1;
-CREATE TABLE LogEntries (timeStamp varchar(255), MachineID varchar(255), messageString varchar(255));
-INSERT INTO LogEntries VALUES ("testts", "testmID", "testms");
+CREATE DATABASE db; USE db;
+CREATE TABLE LogEntries (timeStamp datetime, MachineID varchar(255), messageString varchar(255));
+INSERT INTO LogEntries VALUES ("1999-01-26 00:00:01.181", "testmID", "testms");
 SELECT * FROM LogEntries;
+DELETE FROM LogEntries;
+SELECT * FROM LogEntries;
+exit;
+

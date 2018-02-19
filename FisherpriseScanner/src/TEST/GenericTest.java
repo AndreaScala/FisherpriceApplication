@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +24,7 @@ public class GenericTest {
     private final static String DB = "db1";
     private final static String PASSWORD = "bastacomplicazioni";
 
-    public static void main (String[] args) throws Exception {
+    public static void query (String[] args) throws Exception {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -52,6 +54,18 @@ public class GenericTest {
             st.close();
         }
         catch (SQLException e)
+        {
+          System.err.println(e.getMessage());
+        }
+    }
+    
+    public static void main (String[] args) throws Exception {
+        
+        try {
+            System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
+        
+        }
+        catch (Exception e)
         {
           System.err.println(e.getMessage());
         }
