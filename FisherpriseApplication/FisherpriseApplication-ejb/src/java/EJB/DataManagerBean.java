@@ -5,6 +5,7 @@
  */
 package EJB;
 
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import utilities.LogEntry;
@@ -42,4 +43,9 @@ public class DataManagerBean implements DataManagerBeanLocal {
         System.out.println("Scritto su DB5");
     }
     
+    @Override
+    public ArrayList<LogEntry> retrieve (int par, String parID, String parEv){
+        System.out.println("Sto per fare retrieve");
+        return replicaManagerBean1.readFromDB(par, parID, parEv);
+    }
 }

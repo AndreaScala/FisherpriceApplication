@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Singleton;
@@ -61,5 +62,10 @@ public class ReplicaManagerBean4 implements ReplicaManagerBeanLocal {
         {
             Logger.getLogger(ReplicaManagerBean4.class.getName()).log(Level.SEVERE, null, e);
         }
+    }
+
+    @Override
+    public ArrayList<LogEntry> readFromDB(int par, String parID, String parEv) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

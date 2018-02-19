@@ -5,6 +5,7 @@
  */
 package EJB;
 
+import java.util.ArrayList;
 import javax.ejb.Local;
 import utilities.LogEntry;
 
@@ -15,5 +16,6 @@ import utilities.LogEntry;
 @Local
 public interface DataManagerBeanLocal {
     void add (LogEntry le);
+    ArrayList<LogEntry> retrieve (int par, String parID, String parEv);
     
 }

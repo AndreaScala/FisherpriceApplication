@@ -8,11 +8,13 @@ package analyzer;
 import EJB.DataManagerBeanLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utilities.LogEntry;
 
 /**
  *
@@ -22,6 +24,8 @@ public class AnalyzerServlet extends HttpServlet {
 
     @EJB
     private DataManagerBeanLocal dataManagerBeanLocal;
+    
+    private ArrayList<LogEntry> lel;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,18 +42,7 @@ public class AnalyzerServlet extends HttpServlet {
         
         int query = Integer.parseInt(request.getParameter("query"));
         
-        switch (query){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-        }
+        lel = dataManagerBeanLocal.retrieve(query, request.getParameter("machineid"), request.getParameter("event"));
         
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -63,6 +56,9 @@ public class AnalyzerServlet extends HttpServlet {
             out.println("<h2>" + query + "</h2>");
             out.println("</body>");
             out.println("</html>");
+            
+            for(int i = 0; i< lel.size(); i++)
+                out.println("<h2>" + lel.get(i) + "</h2>");
         }
     }
 

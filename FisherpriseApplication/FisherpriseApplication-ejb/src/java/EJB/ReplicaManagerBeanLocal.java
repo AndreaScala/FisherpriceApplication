@@ -5,6 +5,7 @@
  */
 package EJB;
 
+import java.util.ArrayList;
 import javax.ejb.Local;
 import utilities.LogEntry;
 
@@ -16,4 +17,5 @@ import utilities.LogEntry;
 public interface ReplicaManagerBeanLocal {
     
     void writeOnDB(LogEntry le);
+    ArrayList<LogEntry> readFromDB(int par, String parID, String parEv);
 }
