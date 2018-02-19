@@ -6,11 +6,25 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Fisherprise Application</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>TODO write content</div>
+        <div><h2>Welcome to Fisherprise Application</h2></div>
+        <div><h3>by Scalable Gerlon Inc. All rights reserved</h3></div>
+        <div>Seleziona la tua query:</div>
+        <form action="AnalyzerServlet" method="get">
+            <select name="query">
+                <option value="1">Eventi ordinati nel tempo per tutte le macchine</option>
+                <option value="2">Eventi specifici ordinati nel tempo per tutte le macchine</option>
+                <option value="3">Eventi ordinati nel tempo per singola macchina</option>
+                <option value="4">Eventi specifici ordinati nel tempo per singola macchina</option>
+                <option value="5">Eventi in una specifica finestra temporale</option>
+            </select> <br>
+            ID Macchina: <br> <input type="text" name="machineid"> <br>
+            Evento: <br> <input type="text" name="event"> <br> <br>
+            <input type="submit" name="submit">
+        </form>
     </body>
 </html>
