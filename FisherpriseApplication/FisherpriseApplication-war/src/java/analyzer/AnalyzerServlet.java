@@ -40,10 +40,42 @@ public class AnalyzerServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        int query = Integer.parseInt(request.getParameter("query"));
-        
-        lel = dataManagerBeanLocal.retrieve(query, request.getParameter("machineid"), request.getParameter("event"));
-        
+        int nQuery = Integer.parseInt(request.getParameter("query"));
+        String getQuery="", printReq="", parEv, parID, parStartTimestamp, parEndTimestamp;
+        switch(nQuery){
+            case 1:
+                printReq = "Eventi ordinati nel tempo per tutte le macchine";
+                getQuery = "SELECT * FROM LogEntries ORDER BY timeStamp;";
+                break;
+            case 2:
+                printReq = "Eventi specifici ordinati nel tempo per tutte le macchine";
+                parEv = request.getParameter("event");
+                getQuery = "SELECT * FROM LogEntries WHERE messageString = '" + parEv + 
+                        "' ORDER BY timeStamp;";
+                break;
+            case 3:
+                printReq = "Eventi ordinati nel tempo per singola macchina";
+                parID = request.getParameter("machineid");
+                getQuery = "SELECT * FROM LogEntries WHERE MachineID = '" + parID + 
+                        "' ORDER BY timeStamp;";
+                break;
+            case 4:
+                printReq = "Eventi specifici ordinati nel tempo per singola macchina";
+                parEv = request.getParameter("event");
+                parID = request.getParameter("machineid");
+                getQuery = "SELECT * FROM LogEntries WHERE messageString = '" + parEv + 
+                        "' AND MachineID = '" + parID + "' ORDER BY timeStamp;";
+                break;
+            case 5:
+                printReq = "Eventi in una specifica finestra temporale";
+                parStartTimestamp = request.getParameter("tsstart");
+                parEndTimestamp = request.getParameter("tsend");
+                getQuery = "SELECT * FROM LogEntries WHERE timeStamp BETWEEN '"+ 
+                        parStartTimestamp + "' AND '" + parEndTimestamp + "' ORDER BY timeStamp;";
+                break;
+
+        }
+        lel = dataManagerBeanLocal.retrieve(getQuery);
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
@@ -52,13 +84,15 @@ public class AnalyzerServlet extends HttpServlet {
             out.println("<title>Servlet AnalyzerServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h2>Servlet AnalyzerServlet at " + request.getContextPath() + "</h2>");
-            out.println("<h2>" + query + "</h2>");
+            out.println("<h3>" + printReq + "</h3>");
+            out.println("<h4> Risultati Richiesta: </h4>");
             out.println("</body>");
             out.println("</html>");
             
             for(int i = 0; i< lel.size(); i++)
-                out.println("<h2>" + lel.get(i) + "</h2>");
+                out.println("<b> Timestamp: </b>" + lel.get(i).getTimeStamp().substring(0, lel.get(i).getTimeStamp().length() - ".000".length()) +
+                            "<b> MachineID: </b>" + lel.get(i).getMachineID() +
+                            "<b> Message:  </b>" + lel.get(i).getMessageString() +"<br>");
         }
     }
 

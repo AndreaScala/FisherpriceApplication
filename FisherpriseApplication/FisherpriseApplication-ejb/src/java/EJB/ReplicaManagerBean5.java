@@ -65,7 +65,7 @@ public class ReplicaManagerBean5 implements ReplicaManagerBeanLocal {
     }
 
     @Override
-    public ArrayList<LogEntry> readFromDB(int par, String parID, String parEv) {
+    public ArrayList<LogEntry> readFromDB(String query) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

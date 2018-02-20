@@ -17,5 +17,5 @@ import utilities.LogEntry;
 public interface ReplicaManagerBeanLocal {
     
     void writeOnDB(LogEntry le);
-    ArrayList<LogEntry> readFromDB(int par, String parID, String parEv);
+    ArrayList<LogEntry> readFromDB(String query);
 }

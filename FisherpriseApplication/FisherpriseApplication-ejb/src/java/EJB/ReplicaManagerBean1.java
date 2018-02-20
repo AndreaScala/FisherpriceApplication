@@ -66,7 +66,7 @@ public class ReplicaManagerBean1 implements ReplicaManagerBeanLocal {
     }
 
     @Override
-    public ArrayList<LogEntry> readFromDB(int par, String parID, String parEv) {
+    public ArrayList<LogEntry> readFromDB(String query) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -81,32 +81,11 @@ public class ReplicaManagerBean1 implements ReplicaManagerBeanLocal {
 
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:"+ PORT + "/" + DB + "?autoReconnect=true&useSSL=false","root",PASSWORD);
             
-            String getQuery = "";
-            
-            switch(par){
-                case 1:
-                    getQuery = "SELECT * FROM LogEntries ORDER BY timeStamp;";
-                    break;
-                case 2:
-                    getQuery = "SELECT * FROM LogEntries WHERE messageString = '" + parEv + "' ORDER BY timeStamp;";
-                    break;
-                case 3:
-                    getQuery = "SELECT * FROM LogEntries WHERE MachineID = '" + parID + "' ORDER BY timeStamp;";
-                    break;
-                case 4:
-                    getQuery = "SELECT * FROM LogEntries WHERE messageString = '" + parEv + "' AND MachineID = '" + parID + "' ORDER BY timeStamp;";
-                    break;
-                case 5:
-                    /* Under Construction*/
-                    break;
-                    
-            }
-
             // create the java statement
             Statement st = con.createStatement();
 
             // execute the query, and get a java resultset
-            ResultSet rs = st.executeQuery(getQuery);
+            ResultSet rs = st.executeQuery(query);
 
             // iterate through the java resultset
             while (rs.next())

@@ -16,6 +16,6 @@ import utilities.LogEntry;
 @Local
 public interface DataManagerBeanLocal {
     void add (LogEntry le);
-    ArrayList<LogEntry> retrieve (int par, String parID, String parEv);
+    ArrayList<LogEntry> retrieve (String query);
     
 }

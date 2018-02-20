@@ -21,3 +21,7 @@ DELETE FROM LogEntries;
 SELECT * FROM LogEntries;
 exit;
 
+
+sudo docker restart some-rabbit mysql1 mysql2 mysql3 mysql4 mysql5
+
+

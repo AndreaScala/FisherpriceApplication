@@ -44,8 +44,7 @@ public class DataManagerBean implements DataManagerBeanLocal {
     }
     
     @Override
-    public ArrayList<LogEntry> retrieve (int par, String parID, String parEv){
-        System.out.println("Sto per fare retrieve");
-        return replicaManagerBean1.readFromDB(par, parID, parEv);
+    public ArrayList<LogEntry> retrieve (String query){
+        return replicaManagerBean1.readFromDB(query);
     }
 }
