@@ -5,13 +5,17 @@
  */
 package EJB;
 
+import GossipingFaultDetection.GossipCheckThread4;
+import GossipingFaultDetection.GossipSendThread4;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import utilities.LogEntry;
 
@@ -22,11 +26,52 @@ import utilities.LogEntry;
 @Singleton (name = "replica4")
 public class ReplicaManagerBean4 implements ReplicaManagerBeanLocal {
     
+    public String name = "replica4";
+    public final static int NUMBER_OF_REPLICAS = 5;
     private final static String PORT = "3310";
     private final static String DB = "db";
     private final static String PASSWORD = "bastacomplicazioni";
 
+    //GOSSIPING PARAMETERS    
+    @EJB ( beanName = "replica3")
+    public ReplicaManagerBeanLocal rmA;
+    @EJB ( beanName = "replica5")
+    public ReplicaManagerBeanLocal rmB;
+    
+    public static String[] LiveList = new String[NUMBER_OF_REPLICAS];
+    public static ArrayList<ReplicaManagerBeanLocal> SubsetOfNodes;
+    public static ArrayList<Integer> SubsetOfNodesNumbers;
+    public static ArrayList<String> AckedNodes;
+    public static long Period = 1000;
+    public static int k = 2;
+    private Thread t1, t2;
+    public static boolean working = true;
+    
+    
+    @PostConstruct
+    void init() {
+        for (int i = 0; i<LiveList.length; i++)
+            LiveList[i] = "OK";
+        SubsetOfNodes = new ArrayList<>();
+        SubsetOfNodes.add(rmA); 
+        SubsetOfNodes.add(rmB);
+        SubsetOfNodesNumbers = new ArrayList<>();
+        SubsetOfNodesNumbers.add(3);
+        SubsetOfNodesNumbers.add(5);
+        AckedNodes = new ArrayList<>();
+        t1 = new Thread(new GossipSendThread4(name));
+        t1.start();
+        t2 = new Thread(new GossipCheckThread4(name));
+        t2.start();
+    }
+    
+
+    public String getName() {
+        return name;
+    }
+    
     @Override
+    @Lock(LockType.WRITE)
     public void writeOnDB(LogEntry le) {
         String myQuery = "INSERT INTO LogEntries VALUES ('" + 
             le.getTimeStamp() + "', '" + 
@@ -56,16 +101,28 @@ public class ReplicaManagerBean4 implements ReplicaManagerBeanLocal {
 
             st.close();
             con.close();
-            //System.out.println("Ho scritto sul DB");
+            //System.out.println("Scritto su DB4");
+            working = true;
         }
         catch (SQLException e)
         {
-            Logger.getLogger(ReplicaManagerBean4.class.getName()).log(Level.SEVERE, null, e);
+            //Logger.getLogger(ReplicaManagerBean4.class.getName()).log(Level.SEVERE, null, e);
+            working = false;
         }
     }
 
     @Override
     public ArrayList<LogEntry> readFromDB(String query) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Lock(LockType.WRITE)
+    public void heartBeat(String rmName, String[] LiveList) {
+        if (!AckedNodes.contains(rmName)) AckedNodes.add(rmName);
+        for (int i = 0; i<this.LiveList.length; i++) {
+                if (!SubsetOfNodesNumbers.contains(i+1)) 
+                    this.LiveList[i] = LiveList[i];
+        }
     }
 }

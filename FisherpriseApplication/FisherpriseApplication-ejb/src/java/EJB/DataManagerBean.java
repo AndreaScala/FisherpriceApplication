@@ -15,7 +15,7 @@ import utilities.LogEntry;
  * @author ilario
  */
 @Singleton 
-public class DataManagerBean implements DataManagerBeanLocal {
+public class DataManagerBean implements DataManagerBeanLocal{
 
     @EJB ( beanName = "replica1")
     private ReplicaManagerBeanLocal replicaManagerBean1;
@@ -32,15 +32,10 @@ public class DataManagerBean implements DataManagerBeanLocal {
     @Override
     public void add(LogEntry le) {
         replicaManagerBean1.writeOnDB(le);
-        System.out.println("Scritto su DB1");
         replicaManagerBean2.writeOnDB(le);
-        System.out.println("Scritto su DB2");
         replicaManagerBean3.writeOnDB(le);
-        System.out.println("Scritto su DB3");
         replicaManagerBean4.writeOnDB(le);
-        System.out.println("Scritto su DB4");
         replicaManagerBean5.writeOnDB(le);
-        System.out.println("Scritto su DB5");
     }
     
     @Override

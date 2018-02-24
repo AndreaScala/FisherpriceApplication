@@ -16,6 +16,8 @@ import utilities.LogEntry;
 @Local
 public interface ReplicaManagerBeanLocal {
     
+    String getName();
     void writeOnDB(LogEntry le);
     ArrayList<LogEntry> readFromDB(String query);
+    public void heartBeat(String rmName, String[] LiveList);
 }
