@@ -16,9 +16,11 @@ public class GossipCheckThread1 implements Runnable{
     
     private int[] counters = new int[SubsetOfNodes.size()];
     public String name;
+    public long period;
 
     public GossipCheckThread1(String name) {
         this.name = name;
+        this.period = Period;
     }
     
     
@@ -27,7 +29,7 @@ public class GossipCheckThread1 implements Runnable{
     public void run() {
         while (true) {
             try {
-                Thread.sleep(Period);
+                Thread.sleep(period);
             } catch (InterruptedException ex) {
                 Logger.getLogger(GossipCheckThread1.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -49,8 +51,8 @@ public class GossipCheckThread1 implements Runnable{
                         String index = rm.getName().substring("replica".length());
                         int i = Integer.parseInt(index) - 1;
                         LiveList[i] = "OK";
-                        if (counters[SubsetOfNodes.indexOf(rm)] > 0 && counters[SubsetOfNodes.indexOf(rm)] <=k)
-                            Period+=100;
+                        if (counters[SubsetOfNodes.indexOf(rm)] > 0)
+                            period+=period/10;
                         counters[SubsetOfNodes.indexOf(rm)] = 0;
                         //System.out.println(name + ": acked from " + rm.getName());
                     }
@@ -61,14 +63,9 @@ public class GossipCheckThread1 implements Runnable{
                 for (int i = 0; i< LiveList.length; i++) {
                     LLMessage+=LiveList[i] + " ";
                 }
-                LLMessage+="}";
+                LLMessage+="}" + " period = "+period;
                 System.out.println(LLMessage);
                 
-                try {
-                    Thread.sleep(Period);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(GossipCheckThread1.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         }
     }    
